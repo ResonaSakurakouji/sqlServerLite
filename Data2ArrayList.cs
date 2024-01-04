@@ -52,7 +52,7 @@
                     result += ", ";
                 }
 
-                result += $"{fieldName}=\"{fieldValue}\"";
+                result += $"{fieldName}={fieldValue}";
             }
 
             result += "}";

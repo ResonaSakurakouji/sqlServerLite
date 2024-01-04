@@ -121,7 +121,7 @@ namespace sqlServerLite
                 string buf0;
                 if (arrayList[i] != null)
                 {
-                    buf0 = arrayList[i].ToString();
+                    buf0 = (string)arrayList[i];
                 }
                 else
                 {

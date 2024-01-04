@@ -16,38 +16,35 @@ namespace sqlServerLite
                 try
                 {
                     connection.Open();
-                    Console.WriteLine("连接成功！");
-
-                    // 示例：执行查询
-                    string sqlQuery = "SELECT name FROM sys.databases";
-                    using (SqlCommand command = new SqlCommand(sqlQuery, connection))
-                    {
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            ArrayList display_ArrayList = new ArrayList();
-                            int count = 0;
-                            IDataRecord fieldName_Record = null;
-                            while (reader.Read())
-                            {
-                                if (count == 0)
-                                {
-                                    fieldName_Record = (IDataRecord)reader;
-                                    display_ArrayList.Add(Data2ArrayList.Record2String(fieldName_Record));
-                                }
-                                else
-                                {
-                                    IDataRecord dataRecord = (IDataRecord)reader;
-                                    display_ArrayList.Add(Data2ArrayList.Record2String(dataRecord));
-                                }
-                                count += 1;
-                            }
-                            Console.WriteLine(ArrayList2Table.AutoWidth(display_ArrayList));
-                        }
-                    }
+                    Console.WriteLine("连接成功！退出请单独输入【exit;】");
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine("连接失败: " + ex.Message);
+                }
+
+                // 示例：执行查询
+                string sqlQuery0 = "SELECT name FROM sys.databases;";
+                Interactive.Exe(sqlQuery0, connection);
+                while (true)
+                {
+
+                    string sqlQuery1 = string.Empty;
+                    Console.Write("Lite》");
+                    while (true)
+                    {
+                        sqlQuery1 += Console.ReadLine();
+                        if (sqlQuery1.Contains(';'))
+                        {
+                            sqlQuery1 = sqlQuery1[..sqlQuery1.IndexOf(';')];
+                            break;
+                        }
+                    }
+                    if (sqlQuery1.ToLower() == "exit;")
+                    {
+                        return;
+                    }
+                    Interactive.Exe(sqlQuery1, connection);
                 }
             }
         }

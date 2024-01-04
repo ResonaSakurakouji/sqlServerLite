@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace sqlServerLite
+﻿namespace sqlServerLite
 {
     public class Str2Length
     {
@@ -105,9 +99,12 @@ namespace sqlServerLite
         public static int GetStrLength(string str)
         {
             int result = str.Length;
-            foreach (char ch in str)
+            for (int i = 0; i < str.Length; i += 1)
             {
-                if (!char.IsLetterOrDigit(ch))
+                char ch = str[i];
+                string chStr = ch.ToString();
+                if (System.Text.RegularExpressions.Regex.IsMatch(chStr, @"[^\x00-\x7F]") &&
+                    !chStr.Equals("—") && !chStr.Equals("―"))
                 {
                     result += 1;
                 }

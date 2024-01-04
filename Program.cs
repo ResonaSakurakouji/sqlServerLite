@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Collections;
+using System.Data;
 using System.Data.SqlClient;
 namespace sqlServerLite
 {
@@ -14,10 +15,7 @@ namespace sqlServerLite
             {
                 try
                 {
-                    // 打开连接
                     connection.Open();
-
-                    // 连接已打开，可以执行查询或其他操作
                     Console.WriteLine("连接成功！");
 
                     // 示例：执行查询
@@ -26,14 +24,24 @@ namespace sqlServerLite
                     {
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
+                            ArrayList display_ArrayList = new ArrayList();
+                            int count = 0;
+                            IDataRecord fieldName_Record = null;
                             while (reader.Read())
                             {
-                                for (int i = 0; i < reader.FieldCount; i++)
+                                if (count == 0)
                                 {
-                                    Console.Write($"{reader[i],-20}");
+                                    fieldName_Record = (IDataRecord)reader;
+                                    display_ArrayList.Add(Data2ArrayList.Record2String(fieldName_Record));
                                 }
-                                Console.WriteLine();
+                                else
+                                {
+                                    IDataRecord dataRecord = (IDataRecord)reader;
+                                    display_ArrayList.Add(Data2ArrayList.Record2String(dataRecord));
+                                }
+                                count += 1;
                             }
+                            Console.WriteLine(ArrayList2Table.AutoWidth(display_ArrayList));
                         }
                     }
                 }

@@ -53,7 +53,6 @@
 
                 result += $"{fieldName}={fieldValue}";
             }
-
             result += "}";
 
             return result;

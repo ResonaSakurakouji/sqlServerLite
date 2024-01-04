@@ -5,13 +5,8 @@ namespace sqlServerLite
     {
         static void Main(string[] args)
         {
-            // 定义连接字符串
+            // 定义连接字符串 Integrated Security=true 意思是开启windows凭证验证
             string connectionString = "Server=powerbi-prd,24333;Integrated Security=true;";
-
-            //string a = "手动阀手动12";
-            //Console.WriteLine(a.Length + " " + a);
-            //Console.WriteLine(Str2Length.GetStrLength(a) + " " + a);
-            //return;
 
             // 建立数据库连接
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -25,13 +20,10 @@ namespace sqlServerLite
                 {
                     Console.WriteLine("连接失败: " + ex.Message);
                 }
-
-                // 示例：执行查询
                 string sqlQuery0 = "SELECT name FROM sys.databases;";
                 Interactive.Exe(sqlQuery0, connection);
                 while (true)
                 {
-
                     string sqlQuery1 = string.Empty;
                     Console.Write("Lite》");
                     while (true)
@@ -39,13 +31,13 @@ namespace sqlServerLite
                         sqlQuery1 += Console.ReadLine();
                         if (sqlQuery1.Contains(';'))
                         {
+                            if (sqlQuery1.ToLower() == "exit;")
+                            {
+                                return;
+                            }
                             sqlQuery1 = sqlQuery1[..sqlQuery1.IndexOf(';')];
                             break;
                         }
-                    }
-                    if (sqlQuery1.ToLower() == "exit;")
-                    {
-                        return;
                     }
                     Interactive.Exe(sqlQuery1, connection);
                 }

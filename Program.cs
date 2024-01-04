@@ -10,6 +10,11 @@ namespace sqlServerLite
             // 定义连接字符串
             string connectionString = "Server=powerbi-prd,24333;Integrated Security=true;";
 
+            //string a = "手动阀手动12";
+            //Console.WriteLine(a.Length + " " + a);
+            //Console.WriteLine(Str2Length.GetStrLength(a) + " " + a);
+            //return;
+
             // 建立数据库连接
             using (SqlConnection connection = new SqlConnection(connectionString))
             {

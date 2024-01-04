@@ -44,7 +44,7 @@ namespace sqlServerLite
             for (int i = 0; i < titles.Length; i += 1)
             {
                 titles[i] = showStrings[0][i].Split("=")[0];
-                widths[i] = titles[i].Length;
+                widths[i] = Str2Length.GetStrLength(titles[i]);
             }
             for (int j = 0; j < showStrings.Length; j += 1)
             {
@@ -135,7 +135,7 @@ namespace sqlServerLite
             for (int i = 0; i < titles.Length; i += 1)
             {
                 titles[i] = showStrings[0][i].Split("=")[0];
-                widths[i] = titles[i].Length;
+                widths[i] = Str2Length.GetStrLength(titles[i]);
             }
             for (int j = 0; j < showStrings.Length; j += 1)
             {

@@ -48,17 +48,25 @@
                 for (int i = 0; i < str.Length; i += 1)
                 {
                     char ch = str[i];
-                    if (!char.IsLetterOrDigit(ch))
+                    string chStr = ch.ToString();
+                    if (System.Text.RegularExpressions.Regex.IsMatch(chStr, @"[^\x00-\x7F]") &&
+                        !chStr.Equals("—") && !chStr.Equals("―"))
                     {
                         spaces -= 1;
                     }
                 }
-
-                result = spaces % 2 == 0
-                    ? str.PadLeft(length - spaces / 2)
-                    : str.PadLeft(length - spaces / 2 - 1);
-
-                result = result.PadRight(length);
+                for (int i = 0; i < spaces; i += 1)
+                {
+                    if (i % 2 == 0)
+                    {
+                        str += " ";
+                    }
+                    else
+                    {
+                        result += " ";
+                    }
+                }
+                result += str;
             }
 
             return result;

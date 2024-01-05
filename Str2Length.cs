@@ -1,4 +1,6 @@
-﻿namespace sqlServerLite
+﻿using System.Text.RegularExpressions;
+
+namespace sqlServerLite
 {
     public class Str2Length
     {
@@ -75,30 +77,80 @@
         public static string Str2LengthLeft(string str, int length)
         {
             string result = "";
+
             if (StrIsNumberInt(str))
             {
                 string formatLength = $"{{0,{length}}}";
-                int resultInt = Convert.ToInt32(str);
+                int resultInt = int.Parse(str);
                 result = string.Format(formatLength, resultInt);
             }
             else if (StrIsNumberDouble(str))
             {
                 int spaces = length - str.Length;
-                result = str.PadLeft(length - spaces);
+                for (int i = 0; i < spaces; i++)
+                {
+                    result += " ";
+                }
+                result += str;
             }
             else
             {
                 int spaces = length - str.Length;
-                for (int i = 0; i < str.Length; i += 1)
+                foreach (char ch in str)
                 {
-                    char ch = str[i];
-                    if (!char.IsLetterOrDigit(ch))
+                    string chStr = ch.ToString();
+                    if (Regex.IsMatch(chStr, @"[^\x00-\x7F]") &&
+                        !chStr.Equals("—") && !chStr.Equals("―"))
                     {
-                        spaces -= 1;
+                        spaces--;
                     }
                 }
+                for (int i = 0; i < spaces; i++)
+                {
+                    result += " ";
+                }
+                result = str + result;
+            }
 
-                result = str.PadRight(length - spaces);
+            return result;
+        }
+
+        public static string Str2LengthRight(string str, int length)
+        {
+            string result = "";
+
+            if (StrIsNumberInt(str))
+            {
+                string formatLength = $"{{0,{length}}}";
+                int resultInt = int.Parse(str);
+                result = string.Format(formatLength, resultInt);
+            }
+            else if (StrIsNumberDouble(str))
+            {
+                int spaces = length - str.Length;
+                for (int i = 0; i < spaces; i++)
+                {
+                    result += " ";
+                }
+                result += str;
+            }
+            else
+            {
+                int spaces = length - str.Length;
+                foreach (char ch in str)
+                {
+                    string chStr = ch.ToString();
+                    if (Regex.IsMatch(chStr, @"[^\x00-\x7F]") &&
+                        !chStr.Equals("—") && !chStr.Equals("―"))
+                    {
+                        spaces--;
+                    }
+                }
+                for (int i = 0; i < spaces; i++)
+                {
+                    result += " ";
+                }
+                result = result + str;
             }
 
             return result;

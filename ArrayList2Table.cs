@@ -179,7 +179,14 @@ namespace sqlServerLite
                 result += LineV;
                 for (int i = 0; i < showString.Length; i += 1)
                 {
-                    result += Str2Length.Str2LengthCenter(showString[i], widths[i]) + LineV;
+                    if (Str2Length.StrIsNumberDouble(showString[i]) || Str2Length.StrIsNumberInt(showString[i]))
+                    {
+                        result += Str2Length.Str2LengthRight(showString[i], widths[i]) + LineV;
+                    }
+                    else
+                    {
+                        result += Str2Length.Str2LengthCenter(showString[i], widths[i]) + LineV;
+                    }
                 }
                 result += "\n";
             }

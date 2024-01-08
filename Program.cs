@@ -34,7 +34,7 @@ namespace sqlServerLite
                         {
                             if (Regex.IsMatch(sqlQuery1, @"exit\s*;", RegexOptions.IgnoreCase))
                             {
-                                Console.WriteLine("");
+                                Console.WriteLine("またね~");
                                 return;
                             }
                             sqlQuery1 = sqlQuery1[..sqlQuery1.IndexOf(';')];

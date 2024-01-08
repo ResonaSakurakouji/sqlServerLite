@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sqlServerLite", "sqlServerLite.csproj", "{8E84E828-0813-4B4F-A5AB-D603C9B92D72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sqlServerLite", "sqlServerLite.csproj", "{8E84E828-0813-4B4F-A5AB-D603C9B92D72}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{E163E81F-3ADA-4170-B7FA-5178167C0C53}"
+	ProjectSection(SolutionItems) = preProject
+		SQL_Lite.ico = SQL_Lite.ico
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

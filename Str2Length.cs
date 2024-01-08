@@ -51,8 +51,8 @@ namespace sqlServerLite
                 {
                     char ch = str[i];
                     string chStr = ch.ToString();
-                    if (System.Text.RegularExpressions.Regex.IsMatch(chStr, @"[^\x00-\x7F]") &&
-                        !chStr.Equals("—") && !chStr.Equals("―"))
+                    if (Regex.IsMatch(chStr, @"[^\x00-\x7F]") && !chStr.Equals("·")
+                        && !chStr.Equals("—") && !chStr.Equals("―"))
                     {
                         spaces -= 1;
                     }
@@ -99,8 +99,8 @@ namespace sqlServerLite
                 foreach (char ch in str)
                 {
                     string chStr = ch.ToString();
-                    if (Regex.IsMatch(chStr, @"[^\x00-\x7F]") &&
-                        !chStr.Equals("—") && !chStr.Equals("―"))
+                    if (Regex.IsMatch(chStr, @"[^\x00-\x7F]|[^·—―]")
+                        && !chStr.Equals("·") && !chStr.Equals("—") && !chStr.Equals("―"))
                     {
                         spaces--;
                     }
@@ -140,8 +140,8 @@ namespace sqlServerLite
                 foreach (char ch in str)
                 {
                     string chStr = ch.ToString();
-                    if (Regex.IsMatch(chStr, @"[^\x00-\x7F]") &&
-                        !chStr.Equals("—") && !chStr.Equals("―"))
+                    if (Regex.IsMatch(chStr, @"[^\x00-\x7F]") && !chStr.Equals("·")
+                        && !chStr.Equals("—") && !chStr.Equals("―"))
                     {
                         spaces--;
                     }
@@ -163,8 +163,8 @@ namespace sqlServerLite
             {
                 char ch = str[i];
                 string chStr = ch.ToString();
-                if (System.Text.RegularExpressions.Regex.IsMatch(chStr, @"[^\x00-\x7F]") &&
-                    !chStr.Equals("—") && !chStr.Equals("―"))
+                if (Regex.IsMatch(chStr, @"[^\x00-\x7F]") && !chStr.Equals("·")
+                    && !chStr.Equals("—") && !chStr.Equals("―"))
                 {
                     result += 1;
                 }

@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 namespace sqlServerLite
 {
     internal class Program
@@ -31,7 +32,7 @@ namespace sqlServerLite
                         sqlQuery1 += Console.ReadLine();
                         if (sqlQuery1.Contains(';'))
                         {
-                            if (sqlQuery1.ToLower() == "exit;")
+                            if (Regex.IsMatch(sqlQuery1, @"exit\s*;", RegexOptions.IgnoreCase))
                             {
                                 return;
                             }

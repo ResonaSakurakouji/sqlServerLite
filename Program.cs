@@ -15,7 +15,7 @@ namespace sqlServerLite
                 try
                 {
                     connection.Open();
-                    Console.WriteLine("连接成功！退出请单独输入【exit;】");
+                    Console.WriteLine("连接成功！退出请单独输入【exit;】\n如有使用问题请联系【QinRuiZheng】");
                 }
                 catch (Exception ex)
                 {
@@ -34,6 +34,7 @@ namespace sqlServerLite
                         {
                             if (Regex.IsMatch(sqlQuery1, @"exit\s*;", RegexOptions.IgnoreCase))
                             {
+                                Console.WriteLine("");
                                 return;
                             }
                             sqlQuery1 = sqlQuery1[..sqlQuery1.IndexOf(';')];

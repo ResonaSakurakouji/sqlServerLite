@@ -5,11 +5,12 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <ApplicationIcon>SQL_Lite.ico</ApplicationIcon>
+    <ApplicationIcon>SQL_Server_Lite.ico</ApplicationIcon>
+    <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="SQL_Lite.ico" />
+    <Content Include="SQL_Server_Lite.ico" />
   </ItemGroup>
 
 	<ItemGroup>

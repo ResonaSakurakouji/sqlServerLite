@@ -7,6 +7,7 @@
     <Nullable>enable</Nullable>
     <ApplicationIcon>SQL_Server_Lite.ico</ApplicationIcon>
     <NoWin32Manifest>true</NoWin32Manifest>
+    <StartupObject>sqlServerLite.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,5 +16,9 @@
 
 	<ItemGroup>
 		<PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Version\" />
 	</ItemGroup>
 </Project>

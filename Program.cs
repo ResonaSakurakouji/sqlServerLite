@@ -27,17 +27,48 @@ namespace sqlServerLite
                 {
                     string sqlQuery1 = string.Empty;
                     Console.Write("Lite》");
-                    while (true)
+                    bool doubleMarks = false;
+                    bool doFlag = true;
+                    while (doFlag)
                     {
                         sqlQuery1 += Console.ReadLine();
                         if (sqlQuery1.Contains(';'))
                         {
+                            int semicolonCount = 1;
+                            for (int i = 0; i< sqlQuery1.Length; i += 1)
+                            {
+                                if ((sqlQuery1[i] == '"'))
+                                {
+                                    doubleMarks = !doubleMarks;
+                                }
+                                if ((sqlQuery1[i].Equals(';')) && !doubleMarks) 
+                                {
+                                    semicolonCount += 1;
+                                    if (semicolonCount > 1) 
+                                    { 
+                                        doFlag = false; 
+                                        if (i == 0)
+                                        {
+                                            Console.WriteLine("？不推荐的写法：你在第一位输入了一个分号");
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("？不推荐的写法：请勿连续输入两个英文分号【;】");
+                                        }
+                                        break; 
+                                    }
+                                }
+                                else
+                                {
+                                    semicolonCount = 0;
+                                }
+                            }
+                            if (doFlag == false) { break; }
                             if (Regex.IsMatch(sqlQuery1, @"exit\s*;", RegexOptions.IgnoreCase))
                             {
                                 Console.WriteLine("またね~");
                                 return;
                             }
-                            sqlQuery1 = sqlQuery1[..sqlQuery1.IndexOf(';')];
                             break;
                         }
                     }

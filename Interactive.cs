@@ -32,7 +32,7 @@ namespace sqlServerLite
                             count += 1;
                         }
                         reader.Close();
-                        if (count > 0) 
+                        if (count > 0)
                         {
                             Console.WriteLine(ArrayList2Table.AutoWidth(display_ArrayList));
                             Console.WriteLine($"查询到行数: 【{count}】");
@@ -44,7 +44,14 @@ namespace sqlServerLite
                         else if (!(sqlQuery.Trim().StartsWith("use", StringComparison.OrdinalIgnoreCase)))
                         {
                             int rowsAffected = command.ExecuteNonQuery();
-                            Console.WriteLine($"受影响行数: 【{rowsAffected}】");
+                            if (rowsAffected < 0)
+                            {
+                                Console.WriteLine("！无效的操作");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"受影响行数: 【{rowsAffected}】");
+                            }
                         }
                     }
                 }

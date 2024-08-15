@@ -24,7 +24,7 @@ namespace sqlServerLite
                     Console.WriteLine("输入任意键退出~");
                     Console.ReadKey(); return;
                 }
-                string sqlQuery0 = "SELECT name AS \"可查看的数据库名称\" FROM sys.databases;";
+                string sqlQuery0 = "SELECT name AS Database FROM sys.databases;";
                 Interactive.Exe(sqlQuery0, connection);
                 while (true)
                 {

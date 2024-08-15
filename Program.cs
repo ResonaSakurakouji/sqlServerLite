@@ -8,7 +8,7 @@ namespace sqlServerLite
         {
             // 定义连接字符串 Integrated Security=true 意思是开启windows凭证验证
             string connectionString = "Server=powerbi-prd,24333;Integrated Security=true;";
-
+            Console.CancelKeyPress += new ConsoleCancelEventHandler(CancelKeyPressHandler);
             // 建立数据库连接
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -20,61 +20,75 @@ namespace sqlServerLite
                 catch (Exception ex)
                 {
                     Console.WriteLine("连接失败: " + ex.Message);
+                    Console.WriteLine("一般来说就是没权限；\n你应该用公司的电脑适用这个软件；\n并且确保已经联系好IT为你开放数仓的访问权限");
+                    Console.WriteLine("输入任意键退出~");
+                    Console.ReadKey(); return;
                 }
-                string sqlQuery0 = "SELECT name FROM sys.databases;";
+                string sqlQuery0 = "SELECT name AS \"可查看的数据库名称\" FROM sys.databases;";
                 Interactive.Exe(sqlQuery0, connection);
                 while (true)
                 {
                     string sqlQuery1 = string.Empty;
                     Console.Write("Lite》");
-                    bool doubleMarks = false;
+                    bool insideDoubleQuotes = false;  // 双引号内部判定
+                    bool insideSingleQuotes = false;  // 单引号内部判定
                     bool doFlag = true;
+
                     while (doFlag)
                     {
-                        sqlQuery1 += Console.ReadLine();
-                        if (sqlQuery1.Contains(';'))
+                        string input = Console.ReadLine();
+                        input = input == null ? " " : (input + " ");
+                        sqlQuery1 += input;
+
+                        for (int i = 0; i < input.Length; i++)
                         {
-                            int semicolonCount = 1;
-                            for (int i = 0; i< sqlQuery1.Length; i += 1)
+                            if (input[i] == '"' && !insideSingleQuotes)
                             {
-                                if ((sqlQuery1[i] == '"'))
+                                insideDoubleQuotes = !insideDoubleQuotes;
+                            }
+                            else if (input[i] == '\'' && !insideDoubleQuotes)
+                            {
+                                insideSingleQuotes = !insideSingleQuotes;
+                            }
+
+                            if (input[i] == ';' && !insideDoubleQuotes && !insideSingleQuotes)
+                            {
+                                if (i == 0 || (i > 0 && input[i - 1] == ';'))
                                 {
-                                    doubleMarks = !doubleMarks;
-                                }
-                                if ((sqlQuery1[i].Equals(';')) && !doubleMarks) 
-                                {
-                                    semicolonCount += 1;
-                                    if (semicolonCount > 1) 
-                                    { 
-                                        doFlag = false; 
-                                        if (i == 0)
-                                        {
-                                            Console.WriteLine("？不推荐的写法：你在第一位输入了一个分号");
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine("？不推荐的写法：请勿连续输入两个英文分号【;】");
-                                        }
-                                        break; 
-                                    }
+                                    Console.WriteLine("？不推荐的写法：请勿连续输入两个英文分号【;】");
+                                    doFlag = false;
+                                    break;
                                 }
                                 else
                                 {
-                                    semicolonCount = 0;
+                                    doFlag = false;
                                 }
                             }
-                            if (doFlag == false) { break; }
-                            if (Regex.IsMatch(sqlQuery1, @"exit\s*;", RegexOptions.IgnoreCase))
-                            {
-                                Console.WriteLine("またね~");
-                                return;
-                            }
-                            break;
+                        }
+
+                        if (Regex.IsMatch(sqlQuery1, @"\bexit\s*;", RegexOptions.IgnoreCase))
+                        {
+                            Console.WriteLine("またね~");
+                            return;
                         }
                     }
-                    Interactive.Exe(sqlQuery1, connection);
+
+                    // Execute the query if it is valid
+                    if (!string.IsNullOrWhiteSpace(sqlQuery1))
+                    {
+                        string sqlQuery2 = SyntacticSuger.ConvertToSqlServer(sqlQuery1);
+                        Interactive.Exe(sqlQuery2, connection);
+                    }
                 }
             }
+        }
+
+        // Ctrl+C 处理函数
+        private static void CancelKeyPressHandler(object sender, ConsoleCancelEventArgs e)
+        {
+            // 设置为 true 防止程序终止
+            e.Cancel = true;
+            Console.WriteLine("\n检测到【Ctrl】+【C】组合键，但程序不会终止。若要退出，请输入【exit;】");
         }
     }
 }

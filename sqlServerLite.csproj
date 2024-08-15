@@ -5,16 +5,17 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <ApplicationIcon>SQL_Server_Lite.ico</ApplicationIcon>
+    <ApplicationIcon>media\ico\NP.ico</ApplicationIcon>
     <NoWin32Manifest>true</NoWin32Manifest>
     <StartupObject>sqlServerLite.Program</StartupObject>
-    <FileVersion>1.0.2.0</FileVersion>
+    <FileVersion>1.2.0.0</FileVersion>
     <Authors>QinRuizheng</Authors>
     <Company>Qarmy</Company>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="SQL_Server_Lite.ico" />
+    <Content Include="media\ico\NP.ico" />
   </ItemGroup>
 
 	<ItemGroup>

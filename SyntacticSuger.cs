@@ -83,11 +83,17 @@ namespace sqlServerLite
         // 提取表名或视图名
         private static string GetTableName(string sqlQuery)
         {
-            string[] parts = sqlQuery.Split(' ');
+            string[] parts = sqlQuery.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
             if (parts.Length >= 4)
             {
                 return parts[3].Trim(';');
             }
+            else if (parts.Length >= 2 && (parts[0].Equals("DESCRIBE", StringComparison.OrdinalIgnoreCase) || parts[0].Equals("SHOW", StringComparison.OrdinalIgnoreCase)))
+            {
+                return parts[1].Trim(';');
+            }
+
             return string.Empty;
         }
     }

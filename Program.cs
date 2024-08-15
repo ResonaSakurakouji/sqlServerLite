@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using sqlServerLite.sqlServerLite;
+using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 namespace sqlServerLite
 {
@@ -9,6 +10,7 @@ namespace sqlServerLite
             // 定义连接字符串 Integrated Security=true 意思是开启windows凭证验证
             string connectionString = "Server=powerbi-prd,24333;Integrated Security=true;";
             Console.CancelKeyPress += new ConsoleCancelEventHandler(CancelKeyPressHandler);
+
             // 建立数据库连接
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -24,8 +26,10 @@ namespace sqlServerLite
                     Console.WriteLine("输入任意键退出~");
                     Console.ReadKey(); return;
                 }
-                string sqlQuery0 = "SELECT name AS Database FROM sys.databases;";
+
+                string sqlQuery0 = "SELECT name AS 'Database' FROM sys.databases;";
                 Interactive.Exe(sqlQuery0, connection);
+
                 while (true)
                 {
                     string sqlQuery1 = string.Empty;
@@ -39,6 +43,9 @@ namespace sqlServerLite
                         string input = Console.ReadLine();
                         input = input == null ? " " : (input + " ");
                         sqlQuery1 += input;
+
+                        // 去除换行符，使整个 SQL 语句在一行
+                        sqlQuery1 = sqlQuery1.Replace(Environment.NewLine, " ").Replace("\n", " ").Replace("\r", " ");
 
                         for (int i = 0; i < input.Length; i++)
                         {
@@ -73,7 +80,7 @@ namespace sqlServerLite
                         }
                     }
 
-                    // Execute the query if it is valid
+                    // 执行 SQL 查询
                     if (!string.IsNullOrWhiteSpace(sqlQuery1))
                     {
                         string sqlQuery2 = SyntacticSuger.ConvertToSqlServer(sqlQuery1);
@@ -82,6 +89,7 @@ namespace sqlServerLite
                 }
             }
         }
+
 
         // Ctrl+C 处理函数
         private static void CancelKeyPressHandler(object sender, ConsoleCancelEventArgs e)

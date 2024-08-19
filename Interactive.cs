@@ -70,6 +70,7 @@ namespace sqlServerLite
         {
             using (SqlCommand command = new SqlCommand(sqlQuery, connection))
             {
+                int error_count = 0;
                 try
                 {
                     // Execute the query asynchronously
@@ -81,7 +82,11 @@ namespace sqlServerLite
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"执行 SQL 查询时出错: {ex.Message}");
+                    if (error_count > 0)
+                    {
+                        Console.WriteLine($"执行 SQL 查询时出错: {ex.Message}");
+                    }
+                    error_count += 1;
                 }
             }
         }

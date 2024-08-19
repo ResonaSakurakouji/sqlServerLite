@@ -21,8 +21,9 @@ namespace sqlServerLite
 
                     Console.WriteLine("连接成功！退出请单独输入【exit;】\n如有使用问题请联系【QinRuiZheng】");
 
-                    string sqlQuery0 = "SELECT name AS Database FROM sys.databases;";
-                    await Interactive.ExeAsync(sqlQuery0, connection, cancellationTokenSource.Token);
+                    string sqlQuery0 = "SELECT name AS 'Database' FROM sys.databases;";
+                    await Interactive.ExeAsync(string.Empty, connection, cancellationTokenSource.Token);
+                    Interactive.Exe(sqlQuery0, connection);
 
                     while (true)
                     {

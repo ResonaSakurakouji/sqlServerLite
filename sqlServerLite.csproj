@@ -8,10 +8,10 @@
     <ApplicationIcon>media\ico\NP.ico</ApplicationIcon>
     <NoWin32Manifest>true</NoWin32Manifest>
     <StartupObject>sqlServerLite.Program</StartupObject>
-    <FileVersion>1.2.2.0</FileVersion>
     <Authors>QinRuizheng</Authors>
     <Company>Qarmy</Company>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <FileVersion>1.2.2.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,7 +19,7 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+		<PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
 	</ItemGroup>
 
 	<ItemGroup>

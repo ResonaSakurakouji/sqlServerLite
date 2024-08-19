@@ -64,5 +64,26 @@ namespace sqlServerLite
                 }
             }
         }
+
+        // 处理异步的取消功能
+        public static async Task ExeAsync(string sqlQuery, SqlConnection connection, CancellationToken cancellationToken)
+        {
+            using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+            {
+                try
+                {
+                    // Execute the query asynchronously
+                    await command.ExecuteNonQueryAsync(cancellationToken);
+                }
+                catch (OperationCanceledException)
+                {
+                    Console.WriteLine("数据库操作已取消。");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"执行 SQL 查询时出错: {ex.Message}");
+                }
+            }
+        }
     }
 }

@@ -13,8 +13,57 @@
             { "SHOW DATABASES;", "SELECT name AS 'Database' FROM sys.databases;" },
             { "SHOW TABLES;", "SELECT TABLE_NAME AS 'Tables' FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE';" },
             { "SHOW VIEWS;", "SELECT TABLE_NAME AS 'Views' FROM INFORMATION_SCHEMA.VIEWS;" },
-            { "SHOW TABLE STATUS;", "SELECT name AS 'Table', create_date AS 'CreationDate', modify_date AS 'LastModified' FROM sys.tables;" },
-            { "SHOW VIEW STATUS;", "SELECT name AS 'View', create_date AS 'CreationDate', modify_date AS 'LastModified' FROM sys.views;" }
+            { "SHOW TABLE STATUS;",
+                @"SELECT
+                    t.name AS TableName,
+                    col_count.ColumnsCount AS Fields,
+                    row_count.RowsCount AS Records,
+                    t.create_date AS CreationDate,
+                    t.modify_date AS LastModified
+                FROM
+                    sys.tables t
+                LEFT JOIN (
+                    SELECT 
+                        TABLE_NAME,
+                        COUNT(*) AS ColumnsCount
+                    FROM INFORMATION_SCHEMA.COLUMNS
+                    GROUP BY TABLE_NAME
+                ) AS col_count
+                ON col_count.TABLE_NAME = t.name
+                LEFT JOIN (
+                    SELECT 
+                        t.name AS TableName,
+                        SUM(p.rows) AS RowsCount
+                    FROM 
+                        sys.tables t
+                    INNER JOIN 
+                        sys.partitions p ON p.object_id = t.object_id
+                    WHERE 
+                        p.index_id <= 1
+                    GROUP BY 
+                        t.name
+                ) AS row_count
+                ON row_count.TableName = t.name;"
+            },
+            { 
+                "SHOW VIEW STATUS;",
+                @"SELECT
+                    v.name AS ViewName,
+                    col_count.ColumnsCount AS Fields,
+                    NULL AS Records,
+                    v.create_date AS CreationDate,
+                    v.modify_date AS LastModified
+                FROM
+                    sys.views v
+                LEFT JOIN (
+                    SELECT 
+                        TABLE_NAME AS ViewName,
+                        COUNT(*) AS ColumnsCount
+                    FROM INFORMATION_SCHEMA.COLUMNS
+                    GROUP BY TABLE_NAME
+                ) AS col_count
+                ON col_count.ViewName = v.name;"
+            }
         };
 
             // 转换 MySQL 语法为 SQL Server 语法

@@ -1,6 +1,5 @@
 ﻿using System.Data.SqlClient;
 using sqlServerLite.tools.toTable;
-using sqlServerLite.tools.textFormat;
 
 namespace sqlServerLite.tools.SQLcnct
 {

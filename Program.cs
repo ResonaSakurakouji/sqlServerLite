@@ -5,7 +5,7 @@ namespace sqlServerLite
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             // 定义连接字符串 Integrated Security=true 意思是开启windows凭证验证
             string connectionString = "Server=powerbi-prd,24333;Integrated Security=true;";

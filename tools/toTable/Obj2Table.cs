@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,37 +30,58 @@ namespace sqlServerLite.tools.toTable
         public const char  cLineV  = '¦';
         public const char  cLine2V = '‖';
 
-        // 将 IDataRecord 直接转换为表格字符串
-        public static string TableMake(List<IDataRecord> records)
+        // 获取 IDataRecord 并作为字典列表保存
+        public static List<Dictionary<string, string>> GetRecordsAsList(SqlDataReader reader)
+        {
+            List<Dictionary<string, string>> records = new List<Dictionary<string, string>>();
+
+            while (reader.Read())
+            {
+                var record = new Dictionary<string, string>();
+
+                for (int i = 0; i < reader.FieldCount; i++)
+                {
+                    string fieldName = reader.GetName(i);
+                    string fieldValue = reader.IsDBNull(i) ? "NULL" : reader[i].ToString();
+                    record[fieldName] = fieldValue;
+                }
+
+                records.Add(record);
+            }
+
+            return records;
+        }
+
+
+        public static string TableMake(List<Dictionary<string, string>> records)
         {
             if (records == null || records.Count == 0) return string.Empty;
 
+            var fieldNames = records[0].Keys.ToArray();
+            int[] widths = new int[fieldNames.Length];
             string result = LineP;
-            int[] widths = new int[records[0].FieldCount];
-            string[] titles = new string[records[0].FieldCount];
             string[][] showStrings = new string[records.Count][];
 
-            // 获取字段名称并计算列宽
-            for (int i = 0; i < records[0].FieldCount; i++)
+            // 计算列宽
+            for (int i = 0; i < fieldNames.Length; i++)
             {
-                titles[i] = records[0].GetName(i);
-                widths[i] = Str2Length.GetStrLength(titles[i]);
+                widths[i] = Str2Length.GetStrLength(fieldNames[i]);
             }
 
             // 获取记录中的数据并计算每列的最大宽度
             for (int j = 0; j < records.Count; j++)
             {
-                showStrings[j] = new string[records[0].FieldCount];
-                for (int i = 0; i < records[0].FieldCount; i++)
-            {
-                    string value = records[j].IsDBNull(i) ? "NULL" : records[j][i].ToString();
-                    showStrings[j][i] = value;
-                int valueLength = Str2Length.GetStrLength(value);
-                if (valueLength > widths[i])
+                showStrings[j] = new string[fieldNames.Length];
+                for (int i = 0; i < fieldNames.Length; i++)
                 {
-                    widths[i] = valueLength;
+                    string value = records[j][fieldNames[i]];
+                    showStrings[j][i] = value;
+                    int valueLength = Str2Length.GetStrLength(value);
+                    if (valueLength > widths[i])
+                    {
+                        widths[i] = valueLength;
+                    }
                 }
-            }
             }
 
             // 增加列宽度以增强可读性
@@ -69,21 +91,21 @@ namespace sqlServerLite.tools.toTable
             }
 
             // 生成表头分隔线
-            for (int j = 0; j < titles.Length; j++)
+            for (int j = 0; j < fieldNames.Length; j++)
             {
                 result += new string(cLine2H, widths[j]) + LineP;
             }
             result += "\n" + LineV;
 
             // 添加表头
-            for (int j = 0; j < titles.Length; j++)
+            for (int j = 0; j < fieldNames.Length; j++)
             {
-                result += Str2Length.Str2LengthCenter(titles[j], widths[j]) + LineV;
+                result += Str2Length.Str2LengthCenter(fieldNames[j], widths[j]) + LineV;
             }
             result += "\n" + LineP;
 
             // 添加表头下的分隔线
-            for (int j = 0; j < titles.Length; j++)
+            for (int j = 0; j < fieldNames.Length; j++)
             {
                 result += new string(cLine2H, widths[j]) + LineP;
             }
@@ -95,7 +117,6 @@ namespace sqlServerLite.tools.toTable
                 result += LineV;
                 for (int i = 0; i < showString.Length; i++)
                 {
-                    // 如果是数字则右对齐，非数字则居中对齐
                     if (Str2Length.StrIsNumberDouble(showString[i]) || Str2Length.StrIsNumberInt(showString[i]))
                     {
                         result += Str2Length.Str2LengthRight(showString[i], widths[i]) + LineV;
@@ -109,7 +130,7 @@ namespace sqlServerLite.tools.toTable
             }
 
             // 生成底部分隔线
-            for (int j = 0; j < titles.Length; j++)
+            for (int j = 0; j < fieldNames.Length; j++)
             {
                 result += LineP + new string(cLine1H, widths[j]);
             }
@@ -117,6 +138,5 @@ namespace sqlServerLite.tools.toTable
 
             return result;
         }
-
     }
 }

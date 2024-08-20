@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Data.SqlClient;
-using System.Data;
+﻿using System.Data.SqlClient;
 using sqlServerLite.tools.toTable;
 using sqlServerLite.tools.textFormat;
 
@@ -56,17 +54,31 @@ namespace sqlServerLite.tools.SQLcnct
                                 Console.WriteLine($"受影响行数: 【{rowsAffected}】");
                             }
                         }*/
-                        List<IDataRecord> records = new List<IDataRecord>();
-                        while (reader.Read())
-                        {
-                            records.Add(reader);
-                        }
+                        // 获取记录并转换为 List<Dictionary<string, string>>
+                        List<Dictionary<string, string>> records = Obj2Table.GetRecordsAsList(reader);
 
                         if (records.Count > 0)
                         {
+                            // 生成并输出表格
                             string tableString = Obj2Table.TableMake(records);
                             Console.WriteLine(tableString);
                             Console.WriteLine($"查询到行数: 【{records.Count}】");
+                        }
+                        else if (sqlQuery.Trim().StartsWith("use", StringComparison.OrdinalIgnoreCase))
+                        {
+                            Console.WriteLine($"数据库已切换");
+                        }
+                        else if (!sqlQuery.Trim().StartsWith("use", StringComparison.OrdinalIgnoreCase))
+                        {
+                            int rowsAffected = command.ExecuteNonQuery();
+                            if (rowsAffected < 0)
+                            {
+                                Console.WriteLine("！无效的操作");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"受影响行数: 【{rowsAffected}】");
+                            }
                         }
                     }
                 }

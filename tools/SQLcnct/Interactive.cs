@@ -1,10 +1,78 @@
-﻿using System.Data.SqlClient;
+﻿using System.ComponentModel.Design;
+using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 using sqlServerLite.tools.toTable;
 
 namespace sqlServerLite.tools.SQLcnct
 {
     internal class Interactive
     {
+        public static string? ReadSqlQuery()
+        {
+            bool doFlag = true;
+            string sqlQuery = string.Empty;
+            bool insideSingleQuotes = false;
+            bool insideDoubleQuotes = false;
+
+            while (doFlag)
+            {
+                string input = Console.ReadLine();
+                if (input == null)
+                {
+                    input = string.Empty;
+                }
+
+                // 处理换行情况，可能在引号内
+                sqlQuery += input.Trim() + " ";
+
+                for (int i = 0; i < input.Length; i++)
+                {
+                    char currentChar = input[i];
+
+                    if (currentChar == '"' && !insideSingleQuotes)
+                    {
+                        insideDoubleQuotes = !insideDoubleQuotes;
+                    }
+                    else if (currentChar == '\'' && !insideDoubleQuotes)
+                    {
+                        insideSingleQuotes = !insideSingleQuotes;
+                    }
+
+                    if (currentChar == ';' && !insideDoubleQuotes && !insideSingleQuotes)
+                    {
+                        bool breakFlag = false;
+                        if (i == 0)
+                        {
+                            breakFlag = true;
+                        } 
+                        else if(i > 0 && input[i - 1] == ';')
+                        {
+                            Console.WriteLine("？不推荐的写法：请勿连续输入两个英文分号【;】，第一个分号后内容已被忽略。");
+                            breakFlag = true;
+                        }
+                        // 删除分号前的所有空白字符
+                        int j = i - 1;
+                        while (j >= 0 && char.IsWhiteSpace(input[j]))
+                        {
+                            j--;
+                        }
+                        input = input.Remove(j + 1, i - j - 1);
+                        if (breakFlag) {break;}
+                        doFlag = false; // 结束输入
+                    }
+                }
+
+                // 检查退出命令
+                if (Regex.IsMatch(sqlQuery, @"\bexit\s*;", RegexOptions.IgnoreCase))
+                {
+                    Console.WriteLine("またね~");
+                    Environment.Exit(0);
+                    return null;
+                }
+            }
+            return sqlQuery;
+        }
+
         public static void Exe(string sqlQuery, SqlConnection connection)
         {
             try

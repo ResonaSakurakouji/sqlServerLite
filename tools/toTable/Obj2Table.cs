@@ -95,12 +95,12 @@ namespace sqlServerLite.tools.toTable
             {
                 result += new string(cLine2H, widths[j]) + LineP;
             }
-            result += "\n" + LineV;
+            result += "\n" + Line2V;
 
             // 添加表头
             for (int j = 0; j < fieldNames.Length; j++)
             {
-                result += Str2Length.Str2LengthCenter(fieldNames[j], widths[j]) + LineV;
+                result += Str2Length.Str2LengthCenter(fieldNames[j], widths[j]) + Line2V;
             }
             result += "\n" + LineP;
 

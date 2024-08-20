@@ -30,46 +30,7 @@ namespace sqlServerLite
                         bool insideDoubleQuotes = false;  // 双引号内部判定
                         bool insideSingleQuotes = false;  // 单引号内部判定
                         bool doFlag = true;
-
-                        while (doFlag)
-                        {
-                            string input = Console.ReadLine();
-                            input = input == null ? " " : (input + " ");
-                            sqlQuery1 += input;
-
-                            for (int i = 0; i < input.Length; i++)
-                            {
-                                if (input[i] == '"' && !insideSingleQuotes)
-                                {
-                                    insideDoubleQuotes = !insideDoubleQuotes;
-                                }
-                                else if (input[i] == '\'' && !insideDoubleQuotes)
-                                {
-                                    insideSingleQuotes = !insideSingleQuotes;
-                                }
-
-                                if (input[i] == ';' && !insideDoubleQuotes && !insideSingleQuotes)
-                                {
-                                    if (i == 0 || (i > 0 && input[i - 1] == ';'))
-                                    {
-                                        Console.WriteLine("？不推荐的写法：请勿连续输入两个英文分号【;】");
-                                        doFlag = false;
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        doFlag = false;
-                                    }
-                                }
-                            }
-
-                            if (Regex.IsMatch(sqlQuery1, @"\bexit\s*;", RegexOptions.IgnoreCase))
-                            {
-                                Console.WriteLine("またね~");
-                                return;
-                            }
-                        }
-
+                        sqlQuery1 = Interactive.ReadSqlQuery();
                         // 执行 SQL 查询
                         if (!string.IsNullOrWhiteSpace(sqlQuery1))
                         {

@@ -1,12 +1,11 @@
 ﻿using sqlServerLite.sqlServerLite;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
-using System.Threading;
 namespace sqlServerLite
 {
     internal class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             // 定义连接字符串 Integrated Security=true 意思是开启windows凭证验证
             string connectionString = "Server=powerbi-prd,24333;Integrated Security=true;";
@@ -17,12 +16,10 @@ namespace sqlServerLite
             {
                 try
                 {
-                    await connection.OpenAsync();
-
+                    connection.Open();
                     Console.WriteLine("连接成功！退出请单独输入【exit;】\n如有使用问题请联系【QinRuiZheng】");
 
                     string sqlQuery0 = "SELECT name AS 'Database' FROM sys.databases;";
-                    await Interactive.ExeAsync(string.Empty, connection, cancellationTokenSource.Token);
                     Interactive.Exe(sqlQuery0, connection);
 
                     while (true)
@@ -97,8 +94,17 @@ namespace sqlServerLite
         {
             // 设置为 true 防止程序终止
             e.Cancel = true;
-            Console.WriteLine("\n检测到【Ctrl】+【C】组合键，正在取消当前操作...");
-            cancellationTokenSource.Cancel(); // 触发取消
+            Console.WriteLine("\n检测到【Ctrl】+【C】组合键。\n如欲强行停止，请输入【Q】；\n输入其他案件将放弃退出。");
+            ConsoleKeyInfo cmdKey = Console.ReadKey();
+            if (cmdKey.Key == ConsoleKey.Q)
+            {
+                Console.WriteLine("\n程序已停止。");
+                Environment.Exit(0);
+            }
+            else
+            {
+                Console.WriteLine("\n取消退出，程序继续运行。");
+            }
         }
     }
 }

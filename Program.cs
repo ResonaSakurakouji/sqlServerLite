@@ -1,4 +1,5 @@
 ﻿using sqlServerLite.sqlServerLite;
+using sqlServerLite.tools.SQLcnct;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 namespace sqlServerLite

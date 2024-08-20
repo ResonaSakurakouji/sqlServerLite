@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Data.SqlClient;
 using System.Data;
+using sqlServerLite.tools.toTable;
+using sqlServerLite.tools.textFormat;
 
-namespace sqlServerLite
+namespace sqlServerLite.tools.SQLcnct
 {
     internal class Interactive
     {
@@ -14,6 +16,7 @@ namespace sqlServerLite
                 {
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
+                        /*
                         ArrayList display_ArrayList = new ArrayList();
                         int count = 0;
                         IDataRecord fieldName_Record = null;
@@ -21,12 +24,12 @@ namespace sqlServerLite
                         {
                             if (count == 0)
                             {
-                                fieldName_Record = (IDataRecord)reader;
+                                fieldName_Record = reader;
                                 display_ArrayList.Add(Data2ArrayList.Record2String(fieldName_Record));
                             }
                             else
                             {
-                                IDataRecord dataRecord = (IDataRecord)reader;
+                                IDataRecord dataRecord = reader;
                                 display_ArrayList.Add(Data2ArrayList.Record2String(dataRecord));
                             }
                             count += 1;
@@ -41,7 +44,7 @@ namespace sqlServerLite
                         {
                             Console.WriteLine($"数据库已切换");
                         }
-                        else if (!(sqlQuery.Trim().StartsWith("use", StringComparison.OrdinalIgnoreCase)))
+                        else if (!sqlQuery.Trim().StartsWith("use", StringComparison.OrdinalIgnoreCase))
                         {
                             int rowsAffected = command.ExecuteNonQuery();
                             if (rowsAffected < 0)
@@ -52,6 +55,18 @@ namespace sqlServerLite
                             {
                                 Console.WriteLine($"受影响行数: 【{rowsAffected}】");
                             }
+                        }*/
+                        List<IDataRecord> records = new List<IDataRecord>();
+                        while (reader.Read())
+                        {
+                            records.Add(reader);
+                        }
+
+                        if (records.Count > 0)
+                        {
+                            string tableString = Obj2Table.TableMake(records);
+                            Console.WriteLine(tableString);
+                            Console.WriteLine($"查询到行数: 【{records.Count}】");
                         }
                     }
                 }

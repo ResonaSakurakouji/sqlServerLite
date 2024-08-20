@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace sqlServerLite
+namespace sqlServerLite.tools.textFormat
 {
     public class Str2Length
     {

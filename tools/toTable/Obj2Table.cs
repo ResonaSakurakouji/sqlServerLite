@@ -51,15 +51,15 @@ namespace sqlServerLite.tools.toTable
             {
                 showStrings[j] = new string[records[0].FieldCount];
                 for (int i = 0; i < records[0].FieldCount; i++)
-                {
+            {
                     string value = records[j].IsDBNull(i) ? "NULL" : records[j][i].ToString();
                     showStrings[j][i] = value;
-                    int valueLength = Str2Length.GetStrLength(value);
-                    if (valueLength > widths[i])
-                    {
-                        widths[i] = valueLength;
-                    }
+                int valueLength = Str2Length.GetStrLength(value);
+                if (valueLength > widths[i])
+                {
+                    widths[i] = valueLength;
                 }
+            }
             }
 
             // 增加列宽度以增强可读性

@@ -11,7 +11,7 @@
     <Authors>QinRuizheng</Authors>
     <Company>Qarmy</Company>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <FileVersion>1.3.0.2</FileVersion>
+    <FileVersion>1.4.0.1</FileVersion>
     <PackageIcon>NP.png</PackageIcon>
   </PropertyGroup>
 

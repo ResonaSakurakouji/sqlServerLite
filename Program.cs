@@ -45,7 +45,7 @@ namespace sqlServerLite
                 }
                 catch (InvalidOperationException ex)
                 {
-                    Console.WriteLine("你输入的内容不合法，连接被损毁！\n重新连接");
+                    Console.WriteLine("你输入的内容不合法，连接被损毁！\n重新连接………………");
                     goto Continue_InvalidOperationException;
                 }
                 catch (SqlException ex)

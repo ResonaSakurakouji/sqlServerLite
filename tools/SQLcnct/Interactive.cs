@@ -57,8 +57,8 @@ namespace sqlServerLite.tools.SQLcnct
                             j--;
                         }
                         input = input.Remove(j + 1, i - j - 1);
-                        if (breakFlag) {break;}
                         doFlag = false; // 结束输入
+                        if (breakFlag) {break;}
                     }
                 }
 

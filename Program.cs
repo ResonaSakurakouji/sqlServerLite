@@ -8,21 +8,28 @@ namespace sqlServerLite
     {
         static async Task Main(string[] args)
         {
+            int connectCount = 0;
             // 定义连接字符串 Integrated Security=true 意思是开启windows凭证验证
             string connectionString = "Server=powerbi-prd,24333;Integrated Security=true;";
             Console.CancelKeyPress += new ConsoleCancelEventHandler(CancelKeyPressHandler);
 
-            // 建立数据库连接
+            Continue_InvalidOperationException:  // 建立数据库连接
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 try
                 {
                     connection.Open();
-                    Console.WriteLine("连接成功！退出请单独输入【exit;】\n如有使用问题请联系【QinRuiZheng】");
+                    if (connectCount == 0)
+                    {
+                        Console.WriteLine("连接成功！退出请单独输入【exit;】\n如有使用问题请联系【QinRuiZheng】");
 
-                    string sqlQuery0 = "SELECT name AS 'Database' FROM sys.databases;";
-                    Interactive.Exe(sqlQuery0, connection);
-
+                        string sqlQuery0 = "SELECT name AS 'Database' FROM sys.databases;";
+                        Interactive.Exe(sqlQuery0, connection);
+                    }
+                    else {
+                        Console.WriteLine("重新连接成功！"); 
+                    }
+                    connectCount += 1;
                     while (true)
                     {
                         string sqlQuery1 = string.Empty;
@@ -36,12 +43,18 @@ namespace sqlServerLite
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (InvalidOperationException ex)
                 {
-                    Console.WriteLine("连接失败: " + ex.Message);
+                    Console.WriteLine("你输入的内容不合法，连接被损毁！\n重新连接");
+                    goto Continue_InvalidOperationException;
+                }
+                catch (SqlException ex)
+                {
+                    Console.WriteLine("连接失败信息: " + ex.Message);
                     Console.WriteLine("一般来说就是没权限；\n你应该用公司的电脑适用这个软件；\n并且确保已经联系好IT为你开放数仓的访问权限");
                     Console.WriteLine("输入任意键退出~");
                     Console.ReadKey();
+                    Environment.Exit(0);
                 }
             }
         }

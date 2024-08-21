@@ -27,9 +27,6 @@ namespace sqlServerLite
                     {
                         string sqlQuery1 = string.Empty;
                         Console.Write("Lite》");
-                        bool insideDoubleQuotes = false;  // 双引号内部判定
-                        bool insideSingleQuotes = false;  // 单引号内部判定
-                        bool doFlag = true;
                         sqlQuery1 = Interactive.ReadSqlQuery();
                         // 执行 SQL 查询
                         if (!string.IsNullOrWhiteSpace(sqlQuery1))
@@ -56,7 +53,7 @@ namespace sqlServerLite
         {
             // 设置为 true 防止程序终止
             e.Cancel = true;
-            Console.WriteLine("\n检测到【Ctrl】+【C】组合键。\n如欲强行停止，请输入【Q】；\n输入其他案件将放弃退出。");
+            Console.WriteLine("\n检测到【Ctrl】+【C】组合键。\n如欲强行停止，请输入【Q】；\n输入其他按键将放弃退出。");
             ConsoleKeyInfo cmdKey = Console.ReadKey();
             if (cmdKey.Key == ConsoleKey.Q)
             {
